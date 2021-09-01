@@ -28,6 +28,14 @@ const config: HardhatUserConfig = {
   react: {
     providerPriority: ["web3modal", "hardhat"],
   },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    dev: {
+      default: 1,
+    },
+  },
   networks: {
     hardhat: {
       chainId: 1337,
@@ -36,11 +44,15 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.METAMASK_SEED_WORDS, // test test test test test test test test test test test junk
       },
     },
+    rinkeby: {
+      url: process.env.RINKEBY_URL,
+      accounts: [process.env.ACCOUNT_1, process.env.ACCOUNT_2],
+    },
   },
   solidity: {
     compilers: [
       {
-        version: "0.8.6",
+        version: "0.6.12",
         settings: {
           optimizer: {
             enabled: true,
