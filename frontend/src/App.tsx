@@ -1,30 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 import { Symfoni } from "./hardhat/SymfoniContext";
-import { Greeter } from './components/Greeter';
+import { Swap } from "./components/Swap";
 
 function App() {
-
   return (
     <div className="App">
-      <header className="App-header">
-        <Symfoni autoInit={true} >
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-        </a>
-          <Greeter></Greeter>
-        </Symfoni>
-      </header>
+      <Symfoni autoInit={true}>
+        <div className="min-h-screen bg-gray-800">
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
+            <div className="text-gray-100 text-6xl pt-28 pb-10">
+              Swappity Swap
+            </div>
+            <Swap
+              tokenA="0x5bA2C1c111cbEF4fCA70bEB9d4CD0b5F04E6c14b"
+              tokenB="0x94CF34b37B9f68Aa6F790065b5CB6DFA857368Ed"
+            ></Swap>
+          </div>
+        </div>
+      </Symfoni>
     </div>
   );
 }
