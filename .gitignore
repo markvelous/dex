@@ -1,9 +1,8 @@
 node_modules
 
-#hardhat files
 cache
+build
 artifacts
-frontend/src/hardhat
 deployments/localhost*
-deployments/hardhat*
+
 .env
