@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-
 import {
   ERC20Context,
   UniswapV2Router02Context,
-  CurrentAddressContext
+  CurrentAddressContext,
 } from "../hardhat/SymfoniContext";
 import { ERC20 } from "../hardhat/typechain/ERC20";
 import ethers from "ethers";
-
 interface Props {
   tokenA: string;
   tokenB: string;
@@ -15,7 +13,6 @@ interface Props {
 
 export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
   const ERC20Factory = useContext(ERC20Context);
-  const [currentAddress, setCurrentAddress] = useContext(CurrentAddressContext);
 
   const [tokenAInstance, setTokenAInstance] = useState<ERC20>();
   const [tokenBInstance, setTokenBInstance] = useState<ERC20>();
@@ -28,15 +25,19 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
       setTokenAInstance(ERC20Factory.instance!.attach(tokenA));
       setTokenBInstance(ERC20Factory.instance!.attach(tokenB));
     }
+  }, [ERC20Factory.instance, tokenA, tokenB]);
 
+  useEffect(() => {
     const fetchTokenSymbols = async () => {
-      if (!tokenAInstance || !tokenBInstance) return;
-
+      if (!tokenAInstance || !tokenBInstance)  {
+        return;
+      }
+      
       setTokenASymbol(await tokenAInstance.symbol());
       setTokenBSymbol(await tokenBInstance.symbol());
     };
     fetchTokenSymbols();
-  }, [ERC20Factory.instance, tokenA, tokenB]);
+  }, [tokenAInstance, tokenBInstance])
 
   const [amount, setAmount] = useState<number>(0);
 
@@ -46,23 +47,6 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
 
   const router = useContext(UniswapV2Router02Context);
   const [exchangeAmount, setExchangeAmount] = useState<string>("0");
-
-  const handleSwap = async () => {
-    if (!router.instance || !tokenAInstance) {
-      console.log("router or token instance not found");
-      return;
-    }
-    const time = Math.floor(Date.now() / 1000) + 3600;
-    
-    await (await tokenAInstance.approve(router.instance.address, ethers.utils.parseEther(amount.toString()))).wait();
-    await (await router.instance.swapExactTokensForTokens(
-      ethers.utils.parseEther(amount.toString()),
-      0, // we shouldn't leave this as 0, it is dangerous in real trading
-      [tokenA, tokenB],
-      currentAddress,
-      time
-    )).wait();
-  };
 
   useEffect(() => {
     const fetchExchangeAmount = async () => {
@@ -84,33 +68,59 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
     fetchExchangeAmount();
   }, [router.instance, amount, tokenA, tokenB]);
 
+  const [currentAddress] = useContext(CurrentAddressContext);
+
+  const handleSwap = async () => {
+    if (!router.instance || !tokenAInstance) {
+      console.log("router or token instance not found");
+      return;
+    }
+    const time = Math.floor(Date.now() / 1000) + 3600;
+
+    await (
+      await tokenAInstance.approve(
+        router.instance.address,
+        ethers.utils.parseEther(amount.toString())
+      )
+    ).wait();
+    await (
+      await router.instance.swapExactTokensForTokens(
+        ethers.utils.parseEther(amount.toString()),
+        0, // we shouldn't leave this as 0, it is dangerous in real trading
+        [tokenA, tokenB],
+        currentAddress,
+        time
+      )
+    ).wait();
+  };
+
   return (
     <div className="bg-white shadow sm:rounded-lg">
-      <div className="px-4 py-5">
+      <div className="px-4 py-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="text-gray-800 text-4xl">{tokenASymbol}</div>
-          <div className="text-gray-800 text-3xl"> to </div>
+          <div className="text-green-800 text-3xl"> &#10140; </div>
           <div className="text-gray-800 text-4xl">{tokenBSymbol}</div>
           <div className="flex justify-center">
-            <span className="flex-item text-gray-800 text-2xl">Amount:</span>
+            <span className="flex-item mt-5 text-gray-800 text-2xl">Amount:</span>
             <input
               type="text"
               name="Amount"
               id="amount"
-              className="mx-2 flex-item shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block  border-gray-300 rounded-md text-gray-800 text-2xl w-1/6 text-center"
-              placeholder="20"
+              className="mx-2 mt-5 flex-item shadow-sm focus:ring-gray-500 focus:border-gray-500 block  border-gray-300 rounded-md text-gray-800 text-2xl w-1/3 text-center"
+              placeholder="10"
               onChange={handleAmountChange}
             />
           </div>
           <div></div>
           <div className="flex justify-center">
-            <span className="flex-item text-gray-800 text-2xl">Receive:</span>
+            <span className="flex-item mt-5 text-gray-800 text-2xl">Receive:</span>
             <input
               type="text"
               name="Receive"
               id="receive"
               disabled
-              className="mx-2 flex-item shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block  border-gray-300 rounded-md text-gray-800 text-2xl w-1/6 text-center"
+              className="mx-2 mt-5 flex-item shadow-sm focus:ring-gray-500 focus:border-gray-500 block  border-gray-300 rounded-md text-gray-800 text-2xl w-1/3 text-center"
               placeholder="20"
               value={exchangeAmount}
             />
@@ -118,12 +128,12 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
           <div></div>
           <div></div>
           <button
-    type="submit"
-    className="mt-3 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-red-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-    onClick={handleSwap}
-  >
-    Swap Token
-  </button>
+            type="submit"
+            className="flex-auto justify-center px-2 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-red-500 hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-5 sm:ml-3 sm:w-auto sm:text-xl"
+            onClick={handleSwap}
+          >
+            SWAP!
+          </button>
         </div>
       </div>
     </div>
