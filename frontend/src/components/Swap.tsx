@@ -86,7 +86,7 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
     await (
       await router.instance.swapExactTokensForTokens(
         ethers.utils.parseEther(amount.toString()),
-        0, // we shouldn't leave this as 0, it is dangerous in real trading
+        1, // we shouldn't leave this as 0, it is dangerous in real trading
         [tokenA, tokenB],
         currentAddress,
         time
@@ -95,41 +95,49 @@ export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
   };
 
   return (
-    <div className="bg-white shadow sm:rounded-lg">
+    <div className="bg-black shadow sm:rounded-lg">
       <div className="px-4 py-4">
         <div className="grid grid-cols-3 gap-4">
-          <div className="text-gray-800 text-4xl">{tokenASymbol}</div>
-          <div className="text-green-800 text-3xl"> &#10140; </div>
-          <div className="text-gray-800 text-4xl">{tokenBSymbol}</div>
+          <div className="text-blue-300 text-4xl">{tokenASymbol}</div>
+          <div/>
+          <div className="text-blue-300 text-4xl">{tokenBSymbol}</div>
+          
           <div className="flex justify-center">
-            <span className="flex-item mt-5 text-gray-800 text-2xl">Amount:</span>
+            <span className="flex-item mt-5 text-gray-300 text-2xl">Amount:</span>
+          </div>
+          <div></div>
+          <div className="flex justify-center">
+            <span className="flex-item mt-5 text-gray-300 text-2xl">Receive:</span>
+          </div>
+
+          <div className="flex justify-center">
             <input
               type="text"
               name="Amount"
               id="amount"
-              className="mx-2 mt-5 flex-item shadow-sm focus:ring-gray-500 focus:border-gray-500 block  border-gray-300 rounded-md text-gray-800 text-2xl w-1/3 text-center"
+              className="mx-2 flex-item shadow-sm bg-gray-700 border-gray-300 rounded-md text-gray-300 focus:ring-red-500 focus:border-red-500 block text-4xl w-1/2 text-center"
               placeholder="10"
               onChange={handleAmountChange}
             />
           </div>
-          <div></div>
+          <div className="text-yellow-500 text-4xl"> &#10140; </div>
           <div className="flex justify-center">
-            <span className="flex-item mt-5 text-gray-800 text-2xl">Receive:</span>
             <input
               type="text"
               name="Receive"
               id="receive"
               disabled
-              className="mx-2 mt-5 flex-item shadow-sm focus:ring-gray-500 focus:border-gray-500 block  border-gray-300 rounded-md text-gray-800 text-2xl w-1/3 text-center"
+              className="mx-2 flex-item shadow-sm focus:ring-gray-500 focus:border-gray-500 block border-gray-300 rounded-md text-gray-800 text-4xl w-full text-center truncate"
               placeholder="20"
               value={exchangeAmount}
             />
           </div>
+
           <div></div>
           <div></div>
           <button
             type="submit"
-            className="flex-auto justify-center px-2 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-red-500 hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-5 sm:ml-3 sm:w-auto sm:text-xl"
+            className="flex-item text-center mx-2 mt-3 mb-6 px-2 py-2 border-transparent shadow-sm rounded-md text-white bg-green-600 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:text-xl"
             onClick={handleSwap}
           >
             SWAP!
