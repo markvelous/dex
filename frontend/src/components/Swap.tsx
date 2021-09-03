@@ -5,7 +5,7 @@ import {
   CurrentAddressContext,
 } from "../hardhat/SymfoniContext";
 import { ERC20 } from "../hardhat/typechain/ERC20";
-import ethers from "ethers";
+import { ethers } from "ethers";
 interface Props {
   tokenA: string;
   tokenB: string;
