@@ -11,7 +11,7 @@ interface Props {
   tokenB: string;
 }
 
-export const Swap: React.FC<Props> = ({ tokenA, tokenB }) => {
+export const Swap2: React.FC<Props> = ({ tokenA, tokenB }) => {
   const ERC20Factory = useContext(ERC20Context);
 
   const [tokenAInstance, setTokenAInstance] = useState<ERC20>();
