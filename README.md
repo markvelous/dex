@@ -19,11 +19,10 @@ SGBT4 PT7210027 Mark Tan
 `npm install`
 
 sign in to Metamask
+Set up RPC to http://localhost:8545
 
 `npm start`
 
 The frontend should preview at http://localhost:3000/
 
-Ensure you are useing RPC to http://localhost:8545.
-
-You may also need to set the chainID to 31337 if you are useing Hardhat blockchain development node.
+![](app.png)

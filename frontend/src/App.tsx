@@ -8,10 +8,10 @@ function App() {
   return (
     <div className="App">
       <Symfoni autoInit={true}>
-        <div className="min-h-screen bg-gray-700">
+        <div className="min-h-screen bg-gray-800">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
             <div className="text-gray-100 text-6xl pt-28 pb-10">
-              Remarkable Swap
+              Remarkable 2-Token Swap
             </div>
             <Swap
               tokenA="0x5bA2C1c111cbEF4fCA70bEB9d4CD0b5F04E6c14b"
