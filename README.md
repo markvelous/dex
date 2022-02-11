@@ -1,12 +1,5 @@
 # MARKVELOUS DEX 
 
-```bash
-
-Final Assignment for Intermediate Blockchain Module 
-SGBT4 PT7210027 Mark Tan
-
-```
-
 ## Getting started
 
 ` Install deps with yarn `yarn` or npm `npm install`
